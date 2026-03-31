@@ -1,7 +1,4 @@
 venv/
 __pycache__/
-*.csv
-*.zip
-*.docx
-*.pdf
-data/
+*.pyc
+.env
