@@ -2,7 +2,9 @@
 Consulta en MongoDB:
 Obtiene la categoría más vendida (mayor número de documentos).
 """
+import time
 
+start = time.time()
 from pymongo import MongoClient
 from config import MONGO_HOST, MONGO_PORT
 
@@ -32,3 +34,7 @@ if res:
     print(f"La categoría más vendida fue '{categoria}' con {cantidad} ventas.")
 else:
     print("No se encontraron resultados.")
+
+# Medir tiempo de ejecución
+end = time.time()
+print(f"Execution time: {end - start:.4f} seconds")

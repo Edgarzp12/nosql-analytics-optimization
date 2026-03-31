@@ -2,7 +2,9 @@
 Consulta en Redis:
 Suma ingresos por marca y determina cuál generó más dinero.
 """
+import time
 
+start = time.time()
 import redis
 from config import REDIS_HOST, REDIS_PORT
 
@@ -38,3 +40,8 @@ if marcas:
     print(f"La marca con más ingresos fue '{marca_top}' con ${ingresos}.")
 else:
     print("No se encontraron marcas.")
+
+
+# Medir tiempo de ejecución
+end = time.time()
+print(f"Execution time: {end - start:.4f} seconds")

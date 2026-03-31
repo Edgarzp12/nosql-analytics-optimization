@@ -2,7 +2,9 @@
 Consulta en Redis:
 Determina el mes con más ventas (YYYY-MM).
 """
+import time
 
+start = time.time()
 import redis
 from config import REDIS_HOST, REDIS_PORT
 from datetime import datetime
@@ -38,3 +40,7 @@ if meses:
     print(f"El mes con más ventas fue {mes_top} con {total} ventas.")
 else:
     print("No se encontraron meses.")
+
+# Medir tiempo de ejecución
+end = time.time()
+print(f"Execution time: {end - start:.4f} seconds")

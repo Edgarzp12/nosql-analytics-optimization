@@ -2,7 +2,9 @@
 Consulta en MongoDB:
 Determina el mes con más ventas (event_time ya está en formato datetime).
 """
+import time
 
+start = time.time()
 from pymongo import MongoClient
 from config import MONGO_HOST, MONGO_PORT
 
@@ -33,4 +35,6 @@ if res:
 else:
     print("No se encontraron meses.")
 
-
+# Medir tiempo de ejecución
+end = time.time()
+print(f"Execution time: {end - start:.4f} seconds")

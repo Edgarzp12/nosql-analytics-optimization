@@ -2,7 +2,9 @@
 Consulta en Redis:
 Cuenta todas las categorías y determina cuál aparece más veces.
 """
+import time
 
+start = time.time()
 import redis
 from config import REDIS_HOST, REDIS_PORT
 
@@ -31,3 +33,7 @@ if categorias:
     print(f"La categoría más vendida fue '{categoria_top}' con {total} ventas.")
 else:
     print("No se encontraron categorías.")
+
+# Medir tiempo de ejecución
+end = time.time()
+print(f"Execution time: {end - start:.4f} seconds")

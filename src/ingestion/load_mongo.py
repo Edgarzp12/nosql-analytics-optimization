@@ -1,6 +1,13 @@
+import time
+
+start = time.time()
 import pandas as pd
 from pymongo import MongoClient
 from config import MONGO_HOST, MONGO_PORT
+import time
+
+start = time.time()
+
 
 # 1. Cargar el CSV
 df = pd.read_csv("data/dataset.csv")
@@ -38,3 +45,7 @@ collection.create_index({ "brand": 1 })
 collection.create_index({ "event_time": 1 })
 
 print("Carga + limpieza completada.")
+
+# Medir tiempo de ejecución
+end = time.time()
+print(f"Execution time: {end - start:.4f} seconds")

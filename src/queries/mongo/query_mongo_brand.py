@@ -2,7 +2,9 @@
 Consulta en MongoDB:
 Obtiene la marca que generó más ingresos (suma total de price).
 """
+import time
 
+start = time.time()
 from pymongo import MongoClient
 from config import MONGO_HOST, MONGO_PORT
 
@@ -31,3 +33,6 @@ if res:
 else:
     print("No se encontraron marcas.")
 
+# Medir tiempo de ejecución
+end = time.time()
+print(f"Execution time: {end - start:.4f} seconds")

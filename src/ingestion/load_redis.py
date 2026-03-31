@@ -1,6 +1,10 @@
+import time
+
+start = time.time()
 import pandas as pd
 import redis
 from config import REDIS_HOST, REDIS_PORT
+
 
 df = pd.read_csv("data/dataset.csv")
 
@@ -28,3 +32,7 @@ for _, row in df.iterrows():
     count += 1
 
 print("Datos cargados en Redis:", count)
+
+# Medir tiempo de ejecución
+end = time.time()
+print(f"Execution time: {end - start:.4f} seconds")
