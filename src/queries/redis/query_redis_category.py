@@ -1,6 +1,6 @@
 """
-Consulta en Redis:
-Cuenta todas las categorías y determina cuál aparece más veces.
+Query in Redis:
+Counts all categories and determines which appears most frequently.
 """
 import time
 
@@ -8,32 +8,32 @@ start = time.time()
 import redis
 from config import REDIS_HOST, REDIS_PORT
 
-# 1. Conexión a Redis
+# 1. Connect to Redis
 r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
 
-categorias = {}
+categories = {}
 
-# 2. Iterar sobre todas las ventas en Redis
+# 2. Iterate over all transactions in Redis
 for key in r.scan_iter("transaction:*"):
 
     data = r.hgetall(key)
 
-    categoria = data.get("category_code")
+    category = data.get("category_code")
 
-    # Ignorar valores vacíos o "unknown"
-    if not categoria or categoria.lower() == "unknown":
+    # Ignore "unknown" values
+    if not category or category.lower() == "unknown":
         continue
 
-    categorias[categoria] = categorias.get(categoria, 0) + 1
+    categories[category] = categories.get(category, 0) + 1
 
-# 3. Mostrar resultado
-if categorias:
-    categoria_top = max(categorias, key=categorias.get)
-    total = categorias[categoria_top]
-    print(f"La categoría más vendida fue '{categoria_top}' con {total} ventas.")
+# 3. Find the category with the most sales
+if categories:
+    category_top = max(categories, key=categories.get)
+    total = categories[category_top]
+    print(f"The most sold category was '{category_top}' with {total} sales.")
 else:
-    print("No se encontraron categorías.")
+    print("No categories found.")
 
-# Medir tiempo de ejecución
+# Measure execution time
 end = time.time()
 print(f"Execution time: {end - start:.4f} seconds")

@@ -1,7 +1,7 @@
-# Configuración de MongoDB
+# MongoDB configuration
 MONGO_HOST = "localhost"
 MONGO_PORT = 27017
 
-# Configuración de Redis
+# Redis configuration
 REDIS_HOST = "localhost"
 REDIS_PORT = 6379

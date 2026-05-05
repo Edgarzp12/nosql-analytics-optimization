@@ -1,6 +1,6 @@
 """
-Consulta en MongoDB:
-Obtiene la categoría más vendida (mayor número de documentos).
+Query in MongoDB:
+Gets the category with the highest sales (highest number of documents).
 """
 import time
 
@@ -8,33 +8,33 @@ start = time.time()
 from pymongo import MongoClient
 from config import MONGO_HOST, MONGO_PORT
 
-# 1. Conexión a Mongo
+# 1. Connection to Mongo
 client = MongoClient(MONGO_HOST, MONGO_PORT)
 db = client["ecommerce"]
 collection = db["orders"]
 
-# 2. Pipeline de agregación
-#    - Agrupa por categoría
-#    - Cuenta cuántas ventas hay por categoría
-#    - Ordena de mayor a menor
-#    - Devuelve solo la primera (la más vendida)
+# 2. Aggregation pipeline
+#    - Group by category
+#    - Count how many sales there are per category
+#    - Sort from highest to lowest
+#    - Return only the first (the best-selling)
 pipeline = [
     { "$group": { "_id": "$category_code", "count": { "$sum": 1 } }},
     { "$sort": { "count": -1 }},
     { "$limit": 1 }
 ]
 
-# 3. Ejecutar consulta
+# 3. Execute query
 res = list(collection.aggregate(pipeline))
 
-# 4. Imprimir resultado en formato amigable
+# 4. Print result in a friendly format
 if res:
-    categoria = res[0]["_id"]
+    category = res[0]["_id"]
     cantidad = res[0]["count"]
-    print(f"La categoría más vendida fue '{categoria}' con {cantidad} ventas.")
+    print(f"The best-selling category was '{category}' with {cantidad} sales.")
 else:
-    print("No se encontraron resultados.")
+    print("No results found.")
 
-# Medir tiempo de ejecución
+# Measure execution time
 end = time.time()
 print(f"Execution time: {end - start:.4f} seconds")

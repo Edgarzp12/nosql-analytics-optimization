@@ -1,6 +1,6 @@
 """
-Consulta en Redis:
-Suma ingresos por marca y determina cuál generó más dinero.
+Query in Redis:
+Sums revenue by brand and determines which generated the most money.
 """
 import time
 
@@ -8,21 +8,21 @@ start = time.time()
 import redis
 from config import REDIS_HOST, REDIS_PORT
 
-# Conexión a Redis
+# Connect to Redis
 r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
 
-marcas = {}
+brands = {}
 
-# Recorrer todos los hashes con formato "transaction:*"
+# Get all keys with format "transaction:*"
 for key in r.scan_iter("transaction:*"):
 
     data = r.hgetall(key)
 
-    marca = data.get("brand")
+    brand = data.get("brand")
     price = data.get("price")
 
-    # Validaciones básicas
-    if not marca or marca == "unknown":
+    # Validation
+    if not brand or brand == "unknown":
         continue
 
     try:
@@ -30,18 +30,18 @@ for key in r.scan_iter("transaction:*"):
     except (TypeError, ValueError):
         continue
 
-    # Acumular ingresos por marca
-    marcas[marca] = marcas.get(marca, 0.0) + price
+    # Acumulate revenue by brand
+    brands[brand] = brands.get(brand, 0.0) + price
 
-# Resultados
-if marcas:
-    marca_top = max(marcas, key=marcas.get)
-    ingresos = round(marcas[marca_top], 2)
-    print(f"La marca con más ingresos fue '{marca_top}' con ${ingresos}.")
+# Results
+if brands:
+    brand_top = max(brands, key=brands.get)
+    ingresos = round(brands[brand_top], 2)
+    print(f"The brand with the highest revenue was '{brand_top}' with ${ingresos}.")
 else:
-    print("No se encontraron marcas.")
+    print("No brands found.")
 
 
-# Medir tiempo de ejecución
+# Measure execution time
 end = time.time()
 print(f"Execution time: {end - start:.4f} seconds")

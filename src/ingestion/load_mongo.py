@@ -9,43 +9,43 @@ import time
 start = time.time()
 
 
-# 1. Cargar el CSV
+# 1. load CSV
 df = pd.read_csv("data/dataset.csv")
 
-# 2. Limpieza de datos -------------------------------
+# 2. Data cleaning
 
-# Reemplazar strings "nan" por None
+# Replace strings "nan" by None
 df = df.replace("nan", None)
 
-# Eliminar filas sin categoría
+# Remove rows without category
 df = df[df["category_code"].notna()]
 
-# Convertir event_time a datetime
+# Convert event_time to datetime
 df["event_time"] = pd.to_datetime(df["event_time"], errors="coerce")
 
 df = df[df["event_time"].notna()]
 
-# 3. Convertir a diccionarios
+# 3. Convert to dictionaries
 data_dict = df.to_dict("records")
 
-# 4. Conectar a Mongo
+# 4. Connect to Mongo
 client = MongoClient(MONGO_HOST, MONGO_PORT)
 db = client["ecommerce"]
 
 collection = db["orders"]
 collection.drop()
 
-# 5. Insertar datos limpios
+# 5. Insert cleaned data
 result = collection.insert_many(data_dict)
-print(f"Insertados {len(result.inserted_ids)} documentos limpios.")
+print(f"Inserted {len(result.inserted_ids)} cleaned documents.")
 
-# 6. Crear índices
+# 6. Create indices
 collection.create_index({ "category_code": 1 })
 collection.create_index({ "brand": 1 })
 collection.create_index({ "event_time": 1 })
 
-print("Carga + limpieza completada.")
+print("Load + cleaning completed.")
 
-# Medir tiempo de ejecución
+# Measure execution time
 end = time.time()
 print(f"Execution time: {end - start:.4f} seconds")

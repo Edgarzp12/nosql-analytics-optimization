@@ -1,6 +1,6 @@
 """
-Consulta en MongoDB:
-Obtiene la marca que generó más ingresos (suma total de price).
+Query in MongoDB:
+Gets the brand with the highest revenue (total price sum).
 """
 import time
 
@@ -13,10 +13,10 @@ db = client["ecommerce"]
 collection = db["orders"]
 
 # Pipeline:
-# 1. Filtrar marcas válidas (brand != None)
-# 2. Agrupar por marca y sumar el price (ingresos)
-# 3. Ordenar descendentemente
-# 4. Limitar a 1 marca
+# 1. Filtrate valid brands (brand != None)
+# 2. Group by brand and sum the price (revenue)
+# 3. Sort from highest to lowest revenue
+# 4. Limitate to 1 brand
 pipeline = [
     { "$match": { "brand": { "$ne": None } } },
     { "$group": { "_id": "$brand", "revenue": { "$sum": "$price" } }},
@@ -29,10 +29,10 @@ res = list(collection.aggregate(pipeline))
 if res:
     marca = res[0]["_id"]
     ingresos = round(res[0]["revenue"], 2)
-    print(f"La marca con más ingresos fue '{marca}' con ${ingresos}.")
+    print(f"The brand with the highest revenue was '{marca}' with ${ingresos}.")
 else:
-    print("No se encontraron marcas.")
+    print("No brands found.")
 
-# Medir tiempo de ejecución
+# Measure execution time
 end = time.time()
 print(f"Execution time: {end - start:.4f} seconds")

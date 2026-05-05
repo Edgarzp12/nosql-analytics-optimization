@@ -8,7 +8,8 @@ from config import REDIS_HOST, REDIS_PORT
 
 df = pd.read_csv("data/dataset.csv")
 
-# Limpiar datos antes de enviar a Redis
+# Cleaning: Replace "nan" with None and fill missing values
+df = df.replace("nan", None)
 df = df.fillna({
     "category_code": "unknown",
     "brand": "unknown",
@@ -31,8 +32,8 @@ for _, row in df.iterrows():
     })
     count += 1
 
-print("Datos cargados en Redis:", count)
+print("Transactions loaded into Redis:", count)
 
-# Medir tiempo de ejecución
+# Measure execution time
 end = time.time()
 print(f"Execution time: {end - start:.4f} seconds")

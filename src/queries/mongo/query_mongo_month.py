@@ -1,6 +1,6 @@
 """
-Consulta en MongoDB:
-Determina el mes con más ventas (event_time ya está en formato datetime).
+Query in MongoDB:
+Determines the month with the most sales (event_time is already in datetime format).
 """
 import time
 
@@ -13,10 +13,10 @@ db = client["ecommerce"]
 collection = db["orders"]
 
 # Pipeline:
-# 1. Proyectar un nuevo campo "month" con formato YYYY-MM
-# 2. Agrupar por mes y sumar ventas
-# 3. Ordenar descendentemente
-# 4. Tomar el primer resultado
+# 1. Project a new field "month" with format YYYY-MM
+# 2. Group by month and sum sales
+# 3. Sort descendingly
+# 4. Take the first result
 pipeline = [
     { "$project": { 
         "month": { "$dateToString": { "format": "%Y-%m", "date": "$event_time" }}
@@ -29,12 +29,12 @@ pipeline = [
 res = list(collection.aggregate(pipeline))
 
 if res:
-    mes = res[0]["_id"]
+    month = res[0]["_id"]
     total = res[0]["total"]
-    print(f"El mes con más ventas fue {mes} con {total} ventas.")
+    print(f"The month with the most sales was {month} with {total} sales.")
 else:
-    print("No se encontraron meses.")
+    print("No months found.")
 
-# Medir tiempo de ejecución
+# Measure execution time
 end = time.time()
 print(f"Execution time: {end - start:.4f} seconds")

@@ -1,6 +1,6 @@
 """
-Consulta en Redis:
-Determina el mes con más ventas (YYYY-MM).
+Query in Redis:
+Determines the month with the most sales (YYYY-MM).
 """
 import time
 
@@ -9,12 +9,12 @@ import redis
 from config import REDIS_HOST, REDIS_PORT
 from datetime import datetime
 
-# Conexión a Redis
+# Connect to Redis
 r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
 
-meses = {}
+months = {}
 
-# Leer todas las claves
+# Get all keys with format "transaction:*"
 for key in r.scan_iter("transaction:*"):
 
     data = r.hgetall(key)
@@ -23,24 +23,24 @@ for key in r.scan_iter("transaction:*"):
     if not event_time:
         continue
 
-    # Formato ISO: "2020-08-15 05:46:01+00:00"
+    # Format ISO: "2020-08-15 05:46:01+00:00"
     try:
-        fecha = datetime.fromisoformat(event_time)
+        date = datetime.fromisoformat(event_time)
     except ValueError:
         continue
 
-    month = fecha.strftime("%Y-%m")
+    month = date.strftime("%Y-%m")
 
-    meses[month] = meses.get(month, 0) + 1
+    months[month] = months.get(month, 0) + 1
 
-# Resultado
-if meses:
-    mes_top = max(meses, key=meses.get)
-    total = meses[mes_top]
-    print(f"El mes con más ventas fue {mes_top} con {total} ventas.")
+# Results
+if months:
+    month_top = max(months, key=months.get)
+    total = months[month_top]
+    print(f"The month with the most sales was {month_top} with {total} sales.")
 else:
-    print("No se encontraron meses.")
+    print("No months found.")
 
-# Medir tiempo de ejecución
+# Measure execution time
 end = time.time()
 print(f"Execution time: {end - start:.4f} seconds")
